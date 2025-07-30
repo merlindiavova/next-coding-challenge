@@ -1,7 +1,7 @@
 import { render, screen,} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {act} from 'react';
-import Home from '@/app/page';
+import Home from '@/app/[locale]/page';
 
 describe('Home', () => {
     it('renders an empty basket', () => {

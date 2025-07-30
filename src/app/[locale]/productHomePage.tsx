@@ -1,6 +1,13 @@
 'use client';
 import { useState } from 'react';
-import styles from './page.module.css'
+import styles from '@/app/[locale]/page.module.css'
+import { Product } from '@/lib';
+import { Locale, useTranslations } from 'next-intl';
+
+type Props = {
+  products: Product[];
+  locale: Locale;
+};
 
 function ItemCount({count, name}: {count: number, name: string}) {
   return <div key={name}>{name} count: {count}</div>
@@ -13,7 +20,10 @@ const localProducts = [
   { name: 'Item 4', description: 'Qux' },
 ] as const;
 
-export default function Home() {
+export default function ProductHomePage({ products, locale }: Props) {
+    const ht = useTranslations('Home');
+    const t = useTranslations('Shopping');
+
   const [items, setItems] = useState<{name: string, quantity: number}[]>([]);
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -33,7 +43,7 @@ export default function Home() {
   }
 
   return (
-    <main className={styles.main}>
+    <section>
       <div className={styles.description}>
         <p>
           Michael&apos;s Amazing Web Store
@@ -65,6 +75,6 @@ export default function Home() {
           </button>
         ))}
       </div>
-    </main>
+    </section>
   )
 }

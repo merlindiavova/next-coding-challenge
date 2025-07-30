@@ -8,6 +8,11 @@ export const LOCALE_TO_REGION_MAP = {
   'en': 'us'
 } as const;
 
+export const LOCALE_TO_REGION_PREFIX_MAP = {
+  'en-GB': '/uk',
+  'en': '/us'
+} as const;
+
 export const REGION_TO_LOCALE_MAP = {
   'uk': 'en-GB',
   'us': 'en'
