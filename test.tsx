@@ -1,4 +1,6 @@
-import { render, screen} from '@testing-library/react';
+import { render, screen,} from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import {act} from 'react';
 import Home from '@/app/page';
 
 describe('Home', () => {
@@ -12,14 +14,17 @@ describe('Home', () => {
         expect(basketButton).toHaveTextContent('Basket: 0 items');
     });
 
-    it('renders a basket with 1 item', async () => {
+    it('renders a basket with 1 item after adding one item', async () => {
+        const user = userEvent.setup();
         render(<Home />);
 
         const buttons = screen.getAllByRole('button', {
             name: /Add to basket/i,
         });
 
-        await buttons[0].click();
+        await act(async () => {
+            await user.click(buttons[0]);
+        });
 
         const basketButton = screen.getByRole('button', {
             name: /Basket:/i,
@@ -28,21 +33,29 @@ describe('Home', () => {
         expect(basketButton).toHaveTextContent(/Basket: 1 item$/);
     });
 
-    it('renders a basket with 1 of item 1 and 2 of item 2', async () => {
-        render(<Home />);
+    it(
+        'renders a basket with 2 items after adding two different items',
+        async () => {
+            const user = userEvent.setup();
+            render(<Home />);
 
-        const buttons = screen.getAllByRole('button', {
-            name: /Add to basket/i,
-        });
+            const buttons = screen.getAllByRole('button', {
+                name: /Add to basket/i,
+            });
 
-        await buttons[0].click();
-        await buttons[1].click();
-        await buttons[1].click();
+            await act(async () => {
+                await user.click(buttons[0]);
+            });
 
-        const basketButton = screen.getByRole('button', {
-            name: /Basket:/i,
-        });
+            await act(async () => {
+                await user.click(buttons[1]);
+            });
 
-        expect(basketButton).toHaveTextContent(/Basket: 2 items$/);
-    });
+            const basketButton = screen.getByRole('button', {
+                name: /Basket:/i,
+            });
+
+            expect(basketButton).toHaveTextContent(/Basket: 2 items$/);
+        }
+    );
 });
