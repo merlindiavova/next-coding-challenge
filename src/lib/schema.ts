@@ -18,8 +18,13 @@ export type ApiProduct = z.infer<typeof apiProductSchema>;
 
 export const apiProductsResponseSchema = z.object({
   success: z.boolean(),
-  products: z.array(apiProductSchema),
-});
+  products: z.array(apiProductSchema).optional(),
+  recommendations: z.array(apiProductSchema).optional(),
+}).refine((val) => 
+  (val.products && val.products.length > 0) || (val.recommendations && val.recommendations.length > 0), {
+    message: 'Response must have either products or recommendations array with at least one item',
+  }
+);
 export type ApiProductsResponse = z.infer<typeof apiProductsResponseSchema>;
 
 export const productSchema = z.object({

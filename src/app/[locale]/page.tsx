@@ -1,7 +1,9 @@
 import { setRequestLocale } from 'next-intl/server';
 import { fetchProducts } from '@/lib';
 import { Locale } from 'next-intl';
-import ProductHomePage from './productHomePage';
+import styles from '@/app/[locale]/page.module.css'
+import ProductGrid from '@/component/ProductGrid';
+import ExtendedProductGrid from '@/component/ExtendedProductGrid';
 
 type Props = {
   params: Promise<{ locale: Locale }>;
@@ -12,7 +14,12 @@ export default async function Home({ params }: Props) {
   
   setRequestLocale(locale);
   
-  const products = await fetchProducts(locale);
+  const initialProducts = await fetchProducts(locale);
 
-  return <ProductHomePage products={products} locale={locale} />;
+  return (
+    <div className={styles.grid}>
+      <ProductGrid initialProducts={initialProducts} locale={ locale } />
+      <ExtendedProductGrid locale={locale} />
+    </div>
+  );
 }

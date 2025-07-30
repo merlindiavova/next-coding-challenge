@@ -24,6 +24,10 @@ export async function fetchProducts(locale: string): Promise<Product[]> {
             throw new Error('API response is not successful');
         }
 
+        if (!validResponse.products) {
+            throw new Error('API response malformed');
+        }
+
         return validResponse.products.map(
             (product) => mapApiProduct(product, locale)
         );
@@ -56,7 +60,11 @@ export async function fetchExtendedProducts(
             throw new Error('API response is not successful');
         }
 
-        return validResponse.products.map(
+        if (!validResponse.recommendations) {
+            throw new Error('API response malformed');
+        }
+
+        return validResponse.recommendations.map(
             (product) => mapApiProduct(product, locale)
         );
     } catch (error) {

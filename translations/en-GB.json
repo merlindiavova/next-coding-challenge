@@ -1,1 +1,17 @@
-{}
+{
+  "Home": {
+    "title": "Michael's Amazing Web Store",
+    "basket": "Basket: {count, plural, =0 {empty} one {# item} other {# items}}",
+    "addToBasket": "Add to basket"
+  },
+  "CheckoutPage": {
+    "title": "Your Basket",
+    "totalItems": "Total Items: {count}",
+    "emptyBasket": "Your basket is empty.",
+    "removeFromBasket": "Remove from basket",
+    "productColumn": "Product",
+    "quantityColumn": "Quantity",
+    "priceColumn": "Price",
+    "totalColumn": "Total"
+  }
+}

@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { Product } from '@/lib';
+import { persist } from 'zustand/middleware';
 
 export type BasketItem = Product & { quantity: number };
 
@@ -9,49 +10,60 @@ export type BasketState = {
   removeFromBasket: (productId: number) => void;
   emptyBasket: () => void;
   totalItems: () => number;
+  totalPrice: () => number;
 };
 
-export const useBasketStore = create<BasketState>((set, get) => ({
-    items: [],
-    addToBasket: (product) => {
+export const useBasketStore = create<BasketState>()(
+  persist(
+    (set, get) => ({
+      items: [],
+      addToBasket: (product) => {
         const { items } = get();
         const itemInBasket = items.find((item) => item.id === product.id);
 
         if (itemInBasket) {
-            const updatedItems = items.map((item) =>
-                item.id === product.id
-                ? { ...item, quantity: item.quantity + 1 }
-                : item,
-            );
-            set({ items: updatedItems });
+          const updatedItems = items.map((item) =>
+            item.id === product.id
+              ? { ...item, quantity: item.quantity + 1 }
+              : item,
+          );
+          set({ items: updatedItems });
         } else {
-            set({ items: [...items, { ...product, quantity: 1 }] });
+          set({ items: [...items, { ...product, quantity: 1 }] });
         }
-    },
-    removeFromBasket: (productId) => {
+      },
+      removeFromBasket: (productId) => {
         const { items } = get();
         const itemInBasket = items.find((item) => item.id === productId);
 
-        if (! itemInBasket) {
-            return;
+        if (!itemInBasket) {
+          return;
         }
 
         if (itemInBasket.quantity > 1) {
-            const updatedItems = items.map((item) =>
-                item.id === productId
-                ? { ...item, quantity: item.quantity - 1 }
-                : item,
-            );
-            set({ items: updatedItems });
+          const updatedItems = items.map((item) =>
+            item.id === productId
+              ? { ...item, quantity: item.quantity - 1 }
+              : item,
+          );
+          set({ items: updatedItems });
         } else {
-            const updatedItems = items.filter((item) => item.id !== productId);
-            set({ items: updatedItems });
+          const updatedItems = items.filter((item) => item.id !== productId);
+          set({ items: updatedItems });
         }
-    },
-    emptyBasket: () => {
+      },
+      emptyBasket: () => {
         set({ items: [] });
-    },
-    totalItems: () => {
+      },
+      totalItems: () => {
         return get().items.reduce((total, item) => total + item.quantity, 0);
-    },
-}));
+      },
+      totalPrice: () => {
+        return get().items.reduce((total, item) => total + item.price * item.quantity, 0);
+      },
+    }),
+    {
+      name: 'basket-storage',
+    }
+  )
+);
