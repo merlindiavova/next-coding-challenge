@@ -14,7 +14,8 @@
     "next": "^13.4.19",
     "next-intl": "^4.3.4",
     "react": "^18.2.21",
-    "react-dom": "^18.2.21"
+    "react-dom": "^18.2.21",
+    "zod": "^4.0.13"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.1.2",
