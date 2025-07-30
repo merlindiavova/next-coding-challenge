@@ -15,5 +15,5 @@ export default function ExtendedProductGrid({ locale }: { locale: string }) {
     fetchMore();
   }, [locale]);
 
-    return <ProductGrid initialProducts={extendedProducts} />;
+    return <ProductGrid locale={locale} initialProducts={extendedProducts} />;
 }
